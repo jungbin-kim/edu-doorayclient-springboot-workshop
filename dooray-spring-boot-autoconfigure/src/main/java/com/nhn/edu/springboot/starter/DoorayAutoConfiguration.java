@@ -28,8 +28,8 @@ import org.springframework.web.client.RestTemplate;
  */
 
 @Configuration
-@ConditionalOnClass()
-@ConditionalOnProperty()
+@ConditionalOnClass(DoorayHookSender.class)
+@ConditionalOnProperty(name="dooray.hook-url")
 @EnableConfigurationProperties(DoorayProperties.class)
 public class DoorayAutoConfiguration {
 
@@ -40,6 +40,7 @@ public class DoorayAutoConfiguration {
      * TODO (3) RestTemplate type의 빈이 선언되어 있지 않으면 RestTemplate Bean을 생성하도록 @ConditionalOnMissingBean 을 이용해서 코드를 작성하세요.
      * TODO (3) RestTemplate typeのウィーンが宣言されていないとRestTemplate Beanを生成するように @ConditionalOnMissingBeanを利用してコードを作成してください。
      */
+    @ConditionalOnMissingBean
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -51,7 +52,7 @@ public class DoorayAutoConfiguration {
      */
     @Bean
     public DoorayHookSender doorayHookSender(RestTemplate restTemplate) {
-        return null;
+        return new DoorayHookSender(restTemplate, doorayProperties.getHookUrl());
     }
 
 }
